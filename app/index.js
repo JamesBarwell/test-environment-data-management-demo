@@ -1,49 +1,36 @@
-const sqlite3 = require('sqlite3').verbose();
-const open = require('sqlite').open;
+const express = require('express');
+const mustacheExpress = require('mustache-express');
 
-let db;
+const backend = require('./backend');
 
-async function openDatabase() {
-  db = await open({
-    filename: '../database/db.sqlite',
-    driver: sqlite3.Database
-  })
-  return db;
-}
+backend.migrateDatabase()
+  .then(() => {
+    console.log('Database migration success');
+  });
 
-async function migrateDatabase() {
-  await db.run("CREATE TABLE IF NOT EXISTS test (info TEXT)");
-}
+const port = 8080
 
-async function countRows(tableName) {
-  const rowsCount = await db.get(`SELECT count(*) count FROM ${tableName}`);
-  return rowsCount.count;
-}
+const app = express()
+app.engine('mustache', mustacheExpress());
 
-async function readRows(tableName) {
-  const rows = await db.all(`SELECT * FROM ${tableName}`);
-  return rows;
-}
+app.set('view engine', 'mustache');
+app.set('views', __dirname + '/views');
 
-async function writeTableRow(tableName, values) {
-  const paramTokens = Array(values.length).fill('?');
-  const stmt = await db.prepare(`INSERT INTO ${tableName} VALUES (${paramTokens})`);
-  await stmt.run(values);
-  await stmt.finalize();
-}
+app.get('/', async (req, res) => {
+  const users = await backend.readRows('user');
+  console.log(users)
 
-(async () => {
-  const db = await openDatabase();
+  res.render('index', {
+    hasUsers: users.length > 0,
+    users,
+  });
+})
 
-  await migrateDatabase();
+app.get('/user/:userId', (req, res) => {
+  const userId = req.params.userId;
+  res.send(`Hello user! ${userId}`);
+})
 
-  const writeValue = (new Date()).toISOString();
-  await writeTableRow('test', [writeValue]);
-  const tableRows = await readRows('test');
-
-  await db.close();
-
-  console.log(tableRows);
-})()
-
-
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`)
+})

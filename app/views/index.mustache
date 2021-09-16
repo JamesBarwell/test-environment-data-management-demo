@@ -1,0 +1,11 @@
+<h1>Hello world</h1>
+{{#hasUsers}}
+    <ul>
+    {{#users}}
+        <li><a href="/user/{{userId}}">{{name}}</a> - {{status}}</li>
+    {{/users}}
+</ul>
+{{/hasUsers}}
+{{^hasUsers}}
+<p>There are no users.</p>
+{{/hasUsers}}
