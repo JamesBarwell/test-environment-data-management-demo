@@ -1,0 +1,12 @@
+{
+  "users": [
+    {
+      "name": "Jim Bar",
+      "status": "INACTIVE"
+    },
+    {
+      "name": "Bob Jones",
+      "status": "ACTIVE"
+    }
+  ]
+}
