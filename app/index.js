@@ -11,14 +11,14 @@ backend.migrateDatabase()
 const port = 8080
 
 const app = express()
-app.engine('mustache', mustacheExpress());
+app.use(express.urlencoded({ extended: true }))
 
+app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('views', __dirname + '/views');
 
 app.get('/', async (req, res) => {
-  const users = await backend.readRows('user');
-  console.log(users)
+  const users = await backend.getUsers();
 
   res.render('index', {
     hasUsers: users.length > 0,
@@ -26,9 +26,32 @@ app.get('/', async (req, res) => {
   });
 })
 
-app.get('/user/:userId', (req, res) => {
+app.get('/user/:userId', async (req, res) => {
   const userId = req.params.userId;
-  res.send(`Hello user! ${userId}`);
+  if (!userId) {
+    res.status(404).send('not found');
+    return;
+  }
+
+  const user = await backend.getUser(userId);
+
+  res.render('user', {
+    user,
+  });
+})
+
+app.post('/user', async (req, res) => {
+  const name = req.body.name;
+  const status = req.body.status;
+
+  if (!name) {
+    res.status(400).send('bad request');
+    return;
+  }
+
+  await backend.addUser(name, status);
+
+  res.redirect('/');
 })
 
 app.listen(port, () => {

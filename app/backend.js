@@ -20,27 +20,7 @@ async function getDatabase() {
 
 async function migrateDatabase() {
   const db = await getDatabase();
-  await db.run("CREATE TABLE IF NOT EXISTS user (id INTEGER, name TEXT, status TEXT)");
-}
-
-async function countRows(tableName) {
-  const db = await getDatabase();
-  const rowsCount = await db.get(`SELECT count(*) count FROM ${tableName}`);
-  return rowsCount.count;
-}
-
-async function readRows(tableName) {
-  const db = await getDatabase();
-  const rows = await db.all(`SELECT * FROM ${tableName}`);
-  return rows;
-}
-
-async function writeTableRow(tableName, values) {
-  const db = await getDatabase();
-  const paramTokens = Array(values.length).fill('?');
-  const stmt = await db.prepare(`INSERT INTO ${tableName} VALUES (${paramTokens})`);
-  await stmt.run(values);
-  await stmt.finalize();
+  await db.run("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, status TEXT)");
 }
 
 async function close() {
@@ -48,9 +28,29 @@ async function close() {
   await db.close();
 }
 
+async function getUsers() {
+  const db = await getDatabase();
+  const rows = await db.all("SELECT * FROM user");
+  return rows;
+}
+
+async function getUser(userId) {
+  const db = await getDatabase();
+  const rows = await db.all(`SELECT * FROM user WHERE id = ${userId}`);
+  return rows[0];
+}
+
+async function addUser(name, status) {
+  const db = await getDatabase();
+  const stmt = await db.prepare(`INSERT INTO user (name, status) VALUES (?, ?)`);
+  await stmt.run([name, status]);
+  await stmt.finalize();
+}
+
 module.exports = {
   migrateDatabase,
-  readRows,
-  writeTableRow,
   close,
+  getUsers,
+  getUser,
+  addUser,
 }

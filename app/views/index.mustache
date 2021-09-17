@@ -1,11 +1,31 @@
-<h1>Hello world</h1>
+<h1>User management app</h1>
+
+<h2>User list</h2>
 {{#hasUsers}}
     <ul>
     {{#users}}
-        <li><a href="/user/{{userId}}">{{name}}</a> - {{status}}</li>
+        <li><a href="/user/{{id}}">{{name}}</a> - {{status}}</li>
     {{/users}}
 </ul>
 {{/hasUsers}}
 {{^hasUsers}}
 <p>There are no users.</p>
 {{/hasUsers}}
+
+<h2>Add a user</h2>
+<form method="POST" action="/user">
+  <label for="name">Name:</label>
+  <input type="text" name="name"/>
+  <br />
+
+  <label for="status">Status:</label>
+  <select name="status">
+    <option value="ACTIVE">Active</option>
+    <option value="INACTIVE">Inactive</option>
+    <option value="IN_PROGRESS">In progress</option>
+    <option value="WAITING_APPROVAL">Waiting approval</option>
+  </select>
+  <br />
+
+  <button type="submit">Add user</button>
+</form>
