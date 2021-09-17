@@ -5,3 +5,24 @@
   <li>Name: {{user.name}}</li>
   <li>Status: {{user.status}}</li>
 </ul>
+
+<h2>Entries</h2>
+
+<table>
+  <thead>
+    <th>ID</th>
+    <th>Date</th>
+    <th>Amount</th>
+    <th>Details</th>
+  </thead>
+  <tbody>
+  {{#entries}}
+    <tr>
+      <td>{{id}}</td>
+      <td>{{date}}</td>
+      <td>{{amount}}</td>
+      <td>{{details}}</td>
+    </tr>
+  {{/entries}}
+  </tbody>
+</ul>

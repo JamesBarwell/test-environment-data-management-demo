@@ -34,9 +34,19 @@ app.get('/user/:userId', async (req, res) => {
   }
 
   const user = await backend.getUser(userId);
+  const entries = await backend.getEntries(userId);
+
+  const displayEntries = entries.map((entry) => {
+    return {
+      ...entry,
+      date: formatDate(entry.date),
+      amount: formatMoney(entry.amount),
+    };
+  });
 
   res.render('user', {
     user,
+    entries: displayEntries,
   });
 })
 
@@ -57,3 +67,11 @@ app.post('/user', async (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
+
+function formatDate(date) {
+  return new Date(date).toUTCString();
+}
+
+function formatMoney(amount) {
+  return `£${amount}`;
+}

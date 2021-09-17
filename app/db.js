@@ -20,7 +20,12 @@ async function getDatabase() {
 
 async function migrateDatabase() {
   const db = await getDatabase();
+  try {
   await db.run("CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, status TEXT)");
+  await db.run("CREATE TABLE IF NOT EXISTS entry (id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, date TEXT, amount INTEGER, details TEXT)");
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 async function close() {

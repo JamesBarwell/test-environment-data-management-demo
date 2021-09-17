@@ -1,12 +1,37 @@
 {
   "users": [
     {
+      "id": 1,
       "name": "Jim Bar",
       "status": "INACTIVE"
     },
     {
+      "id": 2,
       "name": "Bob Jones",
       "status": "ACTIVE"
+    }
+  ],
+  "entries": [
+    {
+      "id": 1,
+      "userId": 1,
+      "date": "2021-08-17T08:00:00",
+      "amount": 100.00,
+      "details": "Payment from Foobar"
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "date": "2021-08-17T09:00:00",
+      "amount": 99.99,
+      "details": "Payment from Baz"
+    },
+    {
+      "id": 3,
+      "userId": 2,
+      "date": "2021-08-17T01:00:00",
+      "amount": 9999.99,
+      "details": "Payment from Baz"
     }
   ]
 }

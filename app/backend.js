@@ -19,10 +19,17 @@ async function addUser(name, status) {
   await stmt.finalize();
 }
 
+async function getEntries(userId) {
+  const connection = await db.getDatabase();
+  const rows = await connection.all(`SELECT * FROM entry WHERE user_id = ${userId}`);
+  return rows;
+}
+
 module.exports = {
   migrateDatabase: db.migrateDatabase,
   close: db.close,
   getUsers,
   getUser,
   addUser,
+  getEntries,
 }

@@ -1,7 +1,7 @@
 start:
 	cd app && npm run start
 
-seed:
+seed: destroy
 	cd app && npm run seed
 
 destroy:
