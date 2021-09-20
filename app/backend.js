@@ -13,7 +13,7 @@ async function getUser(userId) {
 }
 
 async function addUser(name, status) {
-  const connection = await getDatabase();
+  const connection = await db.getDatabase();
   const stmt = await connection.prepare(`INSERT INTO user (name, status) VALUES (?, ?)`);
   await stmt.run([name, status]);
   await stmt.finalize();
