@@ -5,7 +5,9 @@ A demo to show how test data can be reset in an environment.
 
 ## How to use
 
-On first set up, run `npm install`.
+On first set up, run `cd app && npm install`.
+
+Then return to the root directory.
 
 To start the application, run `make start`.
 
